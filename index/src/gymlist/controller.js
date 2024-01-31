@@ -36,34 +36,48 @@ const addintogymlist = (req,res) =>{
 const removeItem = (req,res) =>{
     const id = parseInt(req.params.id);
 
+
+
     pool.query(queries.getGymlistinfobyid, [id], (error,results) => {
         const noItemFound = !results.rows.length;
+        if (noItemFound) { 
+            res.send("Item does not exsist in the database!");
+    }
         
-        pool.query(queries.removeItem, [id], (error,results) =>{
+        
+        pool.query(queries.removeItem, [id], (error,results) => {
             if (error) throw error;
-            res.status(200).send("Item removed sucessfully");
+            res.status(200).send("Item removed sucessfully.");
         })
     });
 };
 
-const UpdateItem = (req,res) =>{
+// updte items by id 
+
+ const UpdateItem = (req,res) => {
     const id = parseInt(req.params.id);
     const { item_name } = req.body;
 
-    pool.query.getGymlistinfobyid,[id], (error,results) =>{
+   pool.query(queries.getGymlistinfobyid ,[id], (error,results) => {
         const noItemFound = !results.rows.length;
         if (noItemFound) {
             res.send("Item does not exists, try adding it first");
         }
-        pool.query (queries.UpdateItem, [item_name,item_id], (error,results) => {
+
+        pool.query (queries.UpdateItem, [item_name, id], (error,results) => {
             if (error ) throw error;
             res.status (200).send ("Item updated sucessfully")
 
-        })
+        });
 
-    }
-}
+    });
+};
 
 module.exports = {
-    getGymlist,getGymlistinfobyid,addintogymlist,removeItem,UpdateItem,
+    getGymlist,
+    getGymlistinfobyid,
+    addintogymlist,
+    removeItem,
+    UpdateItem,
+    
 };
