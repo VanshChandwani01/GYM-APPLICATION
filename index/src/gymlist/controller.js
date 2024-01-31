@@ -22,7 +22,7 @@ const addintogymlist = (req,res) =>{
     //check  if that item already exists
     pool.query(queries.checkItemExists, [item_name], (error,results) =>{
         if (results.rows.length){
-            res.send("Item alredy exists.");
+            res.status(400).send("Item alredy exists.");
         }
         
         pool.query(queries.addItem,[item_id, item_name], (error,results) => {
@@ -41,7 +41,7 @@ const removeItem = (req,res) =>{
     pool.query(queries.getGymlistinfobyid, [id], (error,results) => {
         const noItemFound = !results.rows.length;
         if (noItemFound) { 
-            res.send("Item does not exsist in the database!");
+            res.status(400).send("Item does not exsist in the database!");
     }
         
         
@@ -61,12 +61,12 @@ const removeItem = (req,res) =>{
    pool.query(queries.getGymlistinfobyid ,[id], (error,results) => {
         const noItemFound = !results.rows.length;
         if (noItemFound) {
-            res.send("Item does not exists, try adding it first");
+            res.status(400).send("Item does not exists, try adding it first");
         }
 
         pool.query (queries.UpdateItem, [item_name, id], (error,results) => {
             if (error ) throw error;
-            res.status (200).send ("Item updated sucessfully")
+            res.status(200).send ("Item updated sucessfully")
 
         });
 
